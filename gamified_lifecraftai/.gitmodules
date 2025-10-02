@@ -1,0 +1,3 @@
+[submodule "gamified_lifecraftai"]
+    path = gamified_lifecraftai
+    url = https://github.com/khushi-awasthi/Gamified_LifeCraftAI.git

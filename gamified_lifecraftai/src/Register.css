@@ -1,0 +1,113 @@
+/* Register.css */
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #6b7a8f; /* gray-blue background */
+  padding: 20px;
+}
+
+.register-box {
+  display: flex;
+  width: 900px;
+  max-width: 100%;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Left side (info section) */
+.register-left {
+  flex: 1;
+  background-color: #1e2a47; /* dark navy */
+  color: white;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.register-left h2 {
+  font-size: 28px;
+  margin-bottom: 15px;
+}
+
+.register-left p {
+  font-size: 15px;
+  line-height: 1.5;
+  margin-bottom: 30px;
+}
+
+.register-left .host {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.register-left img {
+  width: 300px;
+  height: 300px;
+  border-radius: 70%;
+  justify-content: center;
+  /* margin-bottom: 10px; */
+  /* object-fit: cover; */
+}
+
+/* Right side (form) */
+.register-right {
+  flex: 1;
+  background: #fff;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.register-right h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.register-right p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.reg-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.i1 {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+.i1:focus {
+  border-color: #4285f4;
+}
+
+.reg-btn {
+  background-color: #0b66f5;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.reg-btn:hover {
+  background-color: #0a53c2;
+}
