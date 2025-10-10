@@ -1,4 +1,4 @@
-/* 
+/* /* 
 .profile-container {
   min-height: 100vh;
   padding: 20px;
@@ -365,4 +365,103 @@
   background: #7392c8;
   border-color: #4a90e2;
   transform: translateY(-2px); /* Lift button on hover */
+} */
+/* Container to center card */
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f0f2f5;
+  font-family: Arial, sans-serif;
+}
+
+/* Card styling */
+.profile-card {
+  background: #fff;
+  width: 350px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding: 20px;
+}
+
+/* Header section */
+.profile-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.profile-name {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.profile-role {
+  font-size: 14px;
+  color: #777;
+}
+
+/* Info section */
+.profile-info {
+  margin-bottom: 20px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.info-label {
+  font-weight: bold;
+  color: #555;
+}
+
+.info-value {
+  color: #333;
+}
+
+/* Actions */
+.profile-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn {
+  flex: 1;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.edit-btn {
+  background-color: #4caf50;
+  color: white;
+  margin-right: 10px;
+}
+
+.edit-btn:hover {
+  background-color: #45a049;
+}
+
+.logout-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.logout-btn:hover {
+  background-color: #e53935;
 }

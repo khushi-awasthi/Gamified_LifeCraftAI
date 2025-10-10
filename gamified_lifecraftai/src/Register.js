@@ -13,10 +13,68 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  // src/Register.js (Add this function)
+
+// Function to send user details to Node.js backend
+const sendUserToBackend = async (user, profileData) => {
+  try {
+    const response = await fetch("http://localhost:5000/register-user", { // 👈 Make sure this URL/Port is correct
+      method: "POST",
+      headers: { 
+            "Content-Type": "application/json" 
+        },
+        body: JSON.stringify({
+         uid: user.uid, // Firebase User ID
+         email: user.email,
+            // Pass all the extra state variables
+              ...profileData 
+        }),
+    });
+
+      if (!response.ok) {
+          throw new Error('Failed to save user data in backend.');
+      }
+      console.log('User data successfully sent to backend.');
+
+    } catch (err) {
+      console.error("Error sending user to backend:", err);
+// Optional: Display error to the user if the backend fails
+       alert("Registration successful, but failed to save profile data.");
+   }
+   };
+
+  // const handleRegister = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     await createUserWithEmailAndPassword(auth, email, password);
+  //     navigate("/profile");
+  //   } catch (err) {
+  //     alert(err.message);
+  //   }
+  // };
+  // src/Register.js (Replace your existing handleRegister with this)
+
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+// 1. FIREBASE REGISTRATION (Your existing code)
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // --- START: NEW CODE BLOCK ---
+      
+      // 2. COLLECT DATA
+      const profileData = {
+          name: name,
+          contact: contact,
+          profession: profession
+      };
+
+// 3. SEND TO NODE.JS BACKEND
+      await sendUserToBackend(user, profileData);
+
+      // --- END: NEW CODE BLOCK ---
+
       navigate("/profile");
     } catch (err) {
       alert(err.message);
@@ -58,3 +116,4 @@ export default function Register() {
   
 
 }
+
