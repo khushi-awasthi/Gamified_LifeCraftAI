@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'; 
+import { useNavigate } from 'react-router-dom';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
 
 import { auth } from './firebase'; 
@@ -89,37 +90,63 @@ const createDoughnutChart = (canvasId, label, dataValue, max, customColor) => {
 };
 
 
+
 const App = () => {
 
    // START: ADD THIS BLOCK
+   const navigate = useNavigate();
     const [userProfile, setUserProfile] = useState({
         name: 'Guest User',
         email: 'Loading...',
         loading: true,
     }); 
     
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // User is signed in. Use Firebase data.
-                setUserProfile({
-                    name: user.displayName || 'Name Not Set',
-                    email: user.email || 'Email Not Found',
-                    loading: false,
-                });
-            } else {
-                // User is signed out.
-                setUserProfile({
-                    name: 'Guest User',
-                    email: 'Not Logged In',
-                    loading: false,
-                });
-                // If you use `useNavigate`, you could redirect here: navigate("/login"); 
-            }
-        });
-        return () => unsubscribe();
-    }, []);
    
+  
+
+
+// }, []);
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    if (!user) return;
+
+    try {
+      await fetch('http://localhost:5000/register-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firebaseUid: user.uid,   // ✅ match backend
+          email: user.email,
+          name: user.displayName || 'Name Not Set',
+          profession: 'Professional',
+          contact: '',
+        }),
+      });
+
+     const res = await fetch(`http://localhost:5000/api/profile/${user.uid}`);
+
+      const result = await res.json();
+
+      setUserProfile({
+        name: result.profileData?.name || 'Khushi Awasthi',
+        email: user.email,
+        profession: result.profileData?.profession || 'Professional',
+        loading: false,
+      });
+    } catch (err) {
+      console.error(err);
+      setUserProfile({
+        name: 'Khushi',
+        email: user.email,
+        profession: 'Professional',
+        loading: false,
+      });
+    }
+  });
+
+  return () => unsubscribe();
+}, []);
+
     
   // Use a ref for the style element to manage custom CSS
   const styleRef = useRef(null);
@@ -305,7 +332,7 @@ const App = () => {
                   {/* Goal Item 2 */}
                   <GoalItem category="Study" title="Read 20 Books This Year" dueDate="December 31, 2023" progress={40} color={chartColors.activeGreen} />
                   {/* Goal Item 3 */}
-                  <GoalItem category="Savings" title="Save $10,000" dueDate="January 15, 2024" progress={25} color={chartColors.proYellow} />
+                  <GoalItem category="Eco" title="Save Electricity" dueDate="January 15, 2024" progress={25} color={chartColors.proYellow} />
                 </div>
               </div>
 
@@ -330,7 +357,7 @@ const App = () => {
                 <h3 className="font-medium text-slate-300 mb-3">Recent Sessions</h3>
                 <div className="space-y-3 mb-6">
                   <div className="bg-slate-700/50 rounded-lg p-3 border border-transparent transition-all duration-300 hover:bg-slate-700 hover:border-[#4c51bf]/80">
-                    <p className="text-white font-medium">Morning Meditation</p>
+                    <p  className="text-white font-medium">Morning Meditation</p>
                     <p className="text-xs text-slate-400">Today, 7:30 AM • 15min</p>
                   </div>
                   <div className="bg-slate-700/50 rounded-lg p-3 border border-transparent transition-all duration-300 hover:bg-slate-700 hover:border-[#4c51bf]/80">
@@ -339,7 +366,7 @@ const App = () => {
                   </div>
                 </div>
 
-                <button className="w-full px-4 py-3 bg-[#4c51bf] hover:bg-indigo-600 text-white font-bold rounded-lg transition duration-200 shadow-md shadow-[#4c51bf]/30">
+                <button onClick={() => window.location.href = '/calm_space_updated.html'} className="w-full px-4 py-3 bg-[#4c51bf] hover:bg-indigo-600 text-white font-bold rounded-lg transition duration-200 shadow-md shadow-[#4c51bf]/30">
                   Start New Session
                 </button>
               </div>
@@ -351,10 +378,10 @@ const App = () => {
               {/* 5. Resume & Career Card */}
               <div className="bg-[#2b2e3a] rounded-xl shadow-lg p-5 border border-slate-700/50 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#4c51bf]/80">
                 <h2 className="text-xl font-semibold text-white mb-4">Resume & Career</h2>
-                <p className="text-xs text-slate-400 mb-4">Last updated: May 15, 2023</p>
+                <p className="text-xs text-slate-400 mb-4">Last updated: Nov 10, 2025</p>
 
                 <div className="flex space-x-3 mb-6">
-                  <button className="flex items-center space-x-1 px-3 py-1.5 bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-lg text-sm transition duration-200">
+                  <button onClick={() => window.location.href = '/resume_builder3.html'} className="flex items-center space-x-1 px-3 py-1.5 bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-lg text-sm transition duration-200">
                     {/* SVG for View Icon */}
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                     <span>View</span>
@@ -364,7 +391,7 @@ const App = () => {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                     <span>Edit</span>
                   </button>
-                  <button className="flex items-center space-x-1 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg text-sm transition duration-200">
+                  <button onClick={() => window.location.href = '/resume_builder3.html'}className="flex items-center space-x-1 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg text-sm transition duration-200">
                     {/* SVG for PDF Icon */}
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     <span>PDF</span>
@@ -501,3 +528,4 @@ const GoalItem = ({ category, title, dueDate, progress, color }) => (
 
 
 export default App;
+

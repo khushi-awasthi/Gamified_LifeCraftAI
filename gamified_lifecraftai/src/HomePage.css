@@ -1,0 +1,28 @@
+.nav-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  margin: 0 10px;
+  padding: 0;
+}
+
+.nav-btn:hover {
+  text-decoration: underline;
+}
+
+/* Optional: make sure profile button stays visible */
+.profile-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.profile-btn:hover {
+  color: #ffd700; /* slight gold hover effect */
+  transform: scale(1.1);
+  transition: 0.2s ease;
+}

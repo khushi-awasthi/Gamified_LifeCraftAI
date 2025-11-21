@@ -1,66 +1,4 @@
-// // src/Login.js
-// import { useState } from "react";
-// import { signInWithEmailAndPassword } from "firebase/auth";
-// import { auth } from "./firebase";
-// import { useNavigate } from "react-router-dom";
-// import { Link } from "react-router-dom";
-// import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-// import './Login.css';
 
-
-
-
-
-// export default function Login() {
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const navigate = useNavigate();
-
-  
-
-//   const handleLogin = async (e) => {
-//     e.preventDefault();
-//     try {
-//       await signInWithEmailAndPassword(auth, email, password);
-//       navigate("/profile");
-//     } catch (err) {
-//       alert(err.message);
-//     }
-//   };
-
-//   // inside Login component
-// const handleGoogleSignIn = async () => {
-//   const provider = new GoogleAuthProvider();
-//   try {
-//     await signInWithPopup(auth, provider);
-//     navigate("/profile");
-//   } catch (err) {
-//     alert(err.message);
-//   }
-// };
-
-//   return (
-//     <div className="login-container"style={{ backgroundImage: "url('/background GIF.gif')" }}>
-  
-//     <form onSubmit={handleLogin}>
-//       <h1>Login</h1>
-//       <input className="l1" type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
-//       <input className="l1" type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
-//       <button className="log-btn" type="submit">Login</button>
-//       <button className="log-btn" type="button" onClick={handleGoogleSignIn}>
-//   Sign in with Google
-// </button>
-//       <p>
-//       Don’t have an account? <Link to="/register">Register here</Link>
-//     </p>
-    
-
-//     </form>
-//     </div>
-//   );
-// }
-
-// src/Login.js
 import { useState } from "react";
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "./firebase";
@@ -99,7 +37,8 @@ export default function Login() {
       // Send user info to backend
       await sendUserToBackend(user);
 
-      navigate("/profile");
+      navigate("/HeroPage");
+      
     } catch (err) {
       alert(err.message);
     }
@@ -115,7 +54,8 @@ export default function Login() {
       // Send user info to backend
       await sendUserToBackend(user);
 
-      navigate("/profile");
+      navigate("/HeroPage");
+       
     } catch (err) {
       alert(err.message);
     }
@@ -147,8 +87,8 @@ export default function Login() {
         <button className="log-btn" type="submit">Login</button>
         <button className="log-btn" type="button" onClick={handleGoogleSignIn}>Sign in with Google</button>
 
-        {/* Test backend connection */}
-        <button type="button" onClick={testBackend}>Test Backend Connection</button>
+      
+        
 
         <p>Don’t have an account? <Link to="/register">Register here</Link></p>
       </form>

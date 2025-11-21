@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calm Space | Mood Music & Motivation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --dark-bg: #0f0f1b;
+            --card-bg: #1a1a2e;
+            --accent: #6c5ce7;
+            --accent-hover: #a29bfe;
+            --text-primary: #f5f6fa;
+            --text-secondary: #a2a2b5;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #ff7675;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(108, 92, 231, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 184, 148, 0.1) 0%, transparent 20%);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(108, 92, 231, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(0, 184, 148, 0.05) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0 20px;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            color: var(--accent);
+            background: rgba(108, 92, 231, 0.15);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(108, 92, 231, 0.3);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7, #00b894);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(108, 92, 231, 0.2);
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--success));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .section:hover::before {
+            transform: scaleX(1);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title i {
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        .section-title h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        /* Mood Selection */
+        .mood-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .mood-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mood-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .mood-card:hover::before {
+            left: 100%;
+        }
+
+        .mood-card:hover {
+            transform: translateY(-5px);
+            background: rgba(108, 92, 231, 0.15);
+            border-color: var(--accent);
+        }
+
+        .mood-card.active {
+            background: rgba(108, 92, 231, 0.25);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(108, 92, 231, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .mood-icon {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .mood-card:hover .mood-icon {
+            transform: scale(1.2);
+        }
+
+        .mood-card.calm .mood-icon { color: #00b894; }
+        .mood-card.energetic .mood-icon { color: #fdcb6e; }
+        .mood-card.relaxed .mood-icon { color: #6c5ce7; }
+        .mood-card.focus .mood-icon { color: #0984e3; }
+        .mood-card.happy .mood-icon { color: #fd79a8; }
+        .mood-card.melancholy .mood-icon { color: #636e72; }
+
+        .mood-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .mood-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* SoundCloud Player */
+        .soundcloud-player {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+            position: relative;
+        }
+
+        .track-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .album-art {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .track-details h3 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .track-details p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin: 20px 0;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--accent);
+            border-radius: 3px;
+            position: relative;
+            transition: width 0.1s linear;
+        }
+
+        .progress-handle {
+            width: 14px;
+            height: 14px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: absolute;
+            right: -7px;
+            top: -4px;
+            box-shadow: 0 0 10px rgba(108, 92, 231, 0.7);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .progress-container:hover .progress-handle {
+            opacity: 1;
+        }
+
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            margin-top: 15px;
+        }
+
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-btn:hover {
+            background: var(--accent);
+            transform: scale(1.1);
+            border-color: var(--accent);
+        }
+
+        .play-btn {
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .play-btn:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 0 20px rgba(108, 92, 231, 0.5);
+        }
+
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 120px;
+        }
+
+        .volume-slider {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+        }
+
+        /* Hidden SoundCloud iframe */
+        #soundcloud-iframe {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+        }
+
+        /* Motivation Section - Flip Cards */
+        .motivation-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .flip-card {
+            height: 220px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            box-shadow: var(--card-shadow);
+            border-radius: 15px;
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .flip-card-front {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: white;
+        }
+
+        .flip-card-back {
+            background: var(--card-bg);
+            color: var(--text-primary);
+            transform: rotateY(180deg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .flip-card-front i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.3));
+        }
+
+        .flip-card-front h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .flip-card-back p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .flip-card-back .quote-icon {
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .new-tip {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .new-tip-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+        }
+
+        .new-tip-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.5);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 0 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 40px;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .logo i {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(108, 92, 231, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(108, 92, 231, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(108, 92, 231, 0); }
+        }
+
+        /* Loading state */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 120px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--accent);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-moon"></i>
+                <h1>CALM SPACE</h1>
+            </div>
+            <p class="subtitle">Your sanctuary for mood-based music from SoundCloud and daily motivation. Find your perfect soundtrack and boost your spirit.</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Music Section -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-music"></i>
+                    <h2>Music for Your Mood</h2>
+                </div>
+                
+                <p>Select your current mood to discover the perfect SoundCloud playlist:</p>
+                
+                <div class="mood-selector">
+                    <div class="mood-card calm active" data-mood="calm">
+                        <i class="fas fa-spa mood-icon"></i>
+                        <h3>Calm</h3>
+                        <p>Peaceful & serene</p>
+                    </div>
+                    <div class="mood-card energetic" data-mood="energetic">
+                        <i class="fas fa-bolt mood-icon"></i>
+                        <h3>Energetic</h3>
+                        <p>Upbeat & lively</p>
+                    </div>
+                    <div class="mood-card relaxed" data-mood="relaxed">
+                        <i class="fas fa-cloud mood-icon"></i>
+                        <h3>Relaxed</h3>
+                        <p>Chill & mellow</p>
+                    </div>
+                    <div class="mood-card focus" data-mood="focus">
+                        <i class="fas fa-brain mood-icon"></i>
+                        <h3>Focus</h3>
+                        <p>Concentration</p>
+                    </div>
+                    <div class="mood-card happy" data-mood="happy">
+                        <i class="fas fa-smile-beam mood-icon"></i>
+                        <h3>Happy</h3>
+                        <p>Uplifting & joyful</p>
+                    </div>
+                    <div class="mood-card melancholy" data-mood="melancholy">
+                        <i class="fas fa-cloud-sun-rain mood-icon"></i>
+                        <h3>Melancholy</h3>
+                        <p>Thoughtful & reflective</p>
+                    </div>
+                </div>
+                
+                <div class="soundcloud-player">
+                    <div class="track-info">
+                        <div class="album-art">
+                            <i class="fas fa-headphones"></i>
+                        </div>
+                        <div class="track-details">
+                            <h3 id="current-track-title">Ocean Waves & Piano</h3>
+                            <p id="current-track-artist">Calm Collection</p>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-container" id="progress-container">
+                        <div class="progress-bar" id="progress-bar"></div>
+                        <div class="progress-handle"></div>
+                    </div>
+                    
+                    <div class="time-info">
+                        <span id="current-time">0:00</span>
+                        <span id="duration">0:00</span>
+                    </div>
+                    
+                    <div class="controls">
+                        <div class="control-btn" id="prev-btn">
+                            <i class="fas fa-step-backward"></i>
+                        </div>
+                        <div class="control-btn play-btn pulse" id="play-btn">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="control-btn" id="next-btn">
+                            <i class="fas fa-step-forward"></i>
+                        </div>
+                        <div class="volume-container">
+                            <i class="fas fa-volume-up"></i>
+                            <input type="range" min="0" max="100" value="80" class="volume-slider" id="volume-slider">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hidden SoundCloud iframe -->
+                <iframe id="soundcloud-iframe" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"></iframe>
+            </div>
+            
+            <!-- Motivation Section -->
+            <div class="section">
+                <div class="section-title">
+                    <i class="fas fa-lightbulb"></i>
+                    <h2>Daily Motivation</h2>
+                </div>
+                
+                <div class="motivation-container">
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <i class="fas fa-magic"></i>
+                                <h3>Flip for Wisdom</h3>
+                            </div>
+                            <div class="flip-card-back">
+                                <i class="fas fa-quote-left quote-icon"></i>
+                                <p>Success is not final, failure is not fatal: it is the courage to continue that counts.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <i class="fas fa-star"></i>
+                                <h3>Flip for Wisdom</h3>
+                            </div>
+                            <div class="flip-card-back">
+                                <i class="fas fa-quote-left quote-icon"></i>
+                                <p>Your mindset shapes your reality. Choose thoughts that empower you rather than limit you.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <i class="fas fa-seedling"></i>
+                                <h3>Flip for Wisdom</h3>
+                            </div>
+                            <div class="flip-card-back">
+                                <i class="fas fa-quote-left quote-icon"></i>
+                                <p>Don't underestimate the power of small consistent actions. Tiny improvements lead to remarkable results.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="new-tip">
+                        <button class="new-tip-btn" id="new-tip-btn">
+                            <i class="fas fa-sync-alt"></i> New Motivation Tip
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 Calm Space | Music powered by SoundCloud</p>
+        </footer>
+    </div>
+
+    <!-- SoundCloud Widget API -->
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+    
+    <script>
+        // SoundCloud playlist URLs by mood
+        const soundcloudPlaylists = {
+            calm: "https://soundcloud.com/meditation-music/sets/calm?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
+            energetic: "https://soundcloud.com/m-j-470184432/sets/energetic-hindi-songs?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
+            relaxed: "https://soundcloud.com/rose-571516248/sets/top-hindi-relaxed-90s-music?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
+            focus: "https://soundcloud.com/relaxinghindi/sets/piano-study-focus-time?utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing",
+            happy: "https://soundcloud.com/happy-music/sets/uplifting-indie-pop",
+            melancholy: "https://soundcloud.com/acoustic-music/sets/thoughtful-acoustic-guitar"
+        };
+
+        // Track info for display
+        const trackInfo = {
+            calm: { title: "Ocean Waves & Piano", artist: "Calm Collection" },
+            energetic: { title: "Upbeat Electronic Mix", artist: "Energy Boost" },
+            relaxed: { title: "Chill Lo-Fi Beats", artist: "Study Session" },
+            focus: { title: "Deep Focus Ambient", artist: "Concentration Zone" },
+            happy: { title: "Happy Indie Pop", artist: "Good Vibes Only" },
+            melancholy: { title: "Thoughtful Acoustic", artist: "Reflective Moments" }
+        };
+
+        // DOM Elements
+        const iframe = document.getElementById('soundcloud-iframe');
+        const playBtn = document.getElementById('play-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const progressBar = document.getElementById('progress-bar');
+        const progressContainer = document.getElementById('progress-container');
+        const currentTimeEl = document.getElementById('current-time');
+        const durationEl = document.getElementById('duration');
+        const volumeSlider = document.getElementById('volume-slider');
+        const currentTrackTitle = document.getElementById('current-track-title');
+        const currentTrackArtist = document.getElementById('current-track-artist');
+
+        let widget = null;
+        let currentMood = 'calm';
+        let isPlaying = false;
+        let duration = 0;
+        let currentTime = 0;
+        let progressInterval = null;
+
+        // Initialize SoundCloud player
+        function initSoundCloudPlayer(mood) {
+            const playlistUrl = soundcloudPlaylists[mood];
+
+            // Reset UI
+            currentTrackTitle.textContent = trackInfo[mood].title;
+            currentTrackArtist.textContent = trackInfo[mood].artist;
+            progressBar.style.width = '0%';
+            currentTimeEl.textContent = '0:00';
+            durationEl.textContent = '0:00';
+
+            // Clear any existing interval
+            if (progressInterval) {
+                clearInterval(progressInterval);
+                progressInterval = null;
+            }
+
+            // Ensure iframe onload is set BEFORE changing src
+            iframe.onload = () => {
+                // Create widget instance
+                widget = SC.Widget(iframe);
+
+                // Bind events
+                widget.bind(SC.Widget.Events.READY, onPlayerReady);
+                widget.bind(SC.Widget.Events.PLAY, onPlay);
+                widget.bind(SC.Widget.Events.PAUSE, onPause);
+                widget.bind(SC.Widget.Events.PLAY_PROGRESS, onPlayProgress);
+                widget.bind(SC.Widget.Events.LOAD_PROGRESS, onLoadProgress);
+                widget.bind(SC.Widget.Events.FINISH, onFinish);
+
+                // Set initial volume if possible
+                try {
+                    // Many SoundCloud widget versions accept 0-100 for setVolume
+                    widget.setVolume(parseInt(volumeSlider.value, 10));
+                } catch (e) {
+                    // ignore if not supported
+                }
+            };
+
+            // Update iframe src (use encoded playlist URL)
+            iframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(playlistUrl)}&color=%236c5ce7&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false`;
+        }
+
+        // Player event handlers
+        function onPlayerReady() {
+            // Get initial duration (in ms)
+            try {
+                widget.getDuration((d) => {
+                    duration = (d || 0) / 1000; // Convert to seconds
+                    durationEl.textContent = formatTime(duration);
+                });
+            } catch (e) {
+                console.warn('Unable to get duration from widget', e);
+            }
+        }
+
+        function onPlay() {
+            isPlaying = true;
+            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            playBtn.classList.add('pulse');
+        }
+
+        function onPause() {
+            isPlaying = false;
+            playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            playBtn.classList.remove('pulse');
+        }
+
+        function onPlayProgress(data) {
+            // data.currentPosition is in milliseconds
+            currentTime = (data && data.currentPosition ? data.currentPosition : 0) / 1000;
+            currentTimeEl.textContent = formatTime(currentTime);
+
+            if (duration > 0) {
+                const percent = (currentTime / duration) * 100;
+                progressBar.style.width = `${percent}%`;
+            }
+        }
+
+        function onLoadProgress(/*data*/) {
+            // no-op for now
+        }
+
+        function onFinish() {
+            nextTrack();
+        }
+
+        // Format time helper
+        function formatTime(seconds) {
+            if (isNaN(seconds) || seconds < 0) return '0:00';
+
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Control functions
+        function playPause() {
+            if (!widget) return;
+            if (isPlaying) {
+                widget.pause();
+            } else {
+                widget.play();
+            }
+        }
+
+        function nextTrack() {
+            if (!widget) return;
+            try {
+                widget.next();
+            } catch (e) {
+                console.warn('next() not supported', e);
+            }
+            progressBar.style.width = '0%';
+            currentTimeEl.textContent = '0:00';
+        }
+
+        function prevTrack() {
+            if (!widget) return;
+            try {
+                widget.prev();
+            } catch (e) {
+                console.warn('prev() not supported', e);
+            }
+            progressBar.style.width = '0%';
+            currentTimeEl.textContent = '0:00';
+        }
+
+        // Progress bar seeking
+        progressContainer.addEventListener('click', (e) => {
+            if (widget && duration > 0) {
+                const rect = progressContainer.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const percent = Math.max(0, Math.min(1, clickX / rect.width));
+                const newTime = percent * duration; // seconds
+                try {
+                    widget.seekTo(newTime * 1000); // ms
+                } catch (err) {
+                    console.warn('seekTo not supported', err);
+                }
+            }
+        });
+
+        // Volume control
+        volumeSlider.addEventListener('input', () => {
+            if (widget) {
+                try {
+                    // Many SoundCloud widget versions accept 0-100 here
+                    widget.setVolume(parseInt(volumeSlider.value, 10));
+                } catch (e) {
+                    // fallback: try 0-1
+                    try {
+                        widget.setVolume(parseInt(volumeSlider.value, 10) / 100);
+                    } catch (e2) {
+                        console.warn('setVolume not supported', e2);
+                    }
+                }
+            }
+        });
+
+        // Button event listeners
+        playBtn.addEventListener('click', playPause);
+        nextBtn.addEventListener('click', nextTrack);
+        prevBtn.addEventListener('click', prevTrack);
+
+        // Initialize with default mood
+        initSoundCloudPlayer(currentMood);
+
+        // Mood selection
+        document.querySelectorAll('.mood-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.mood-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+
+                const mood = card.dataset.mood;
+                currentMood = mood;
+                initSoundCloudPlayer(mood);
+            });
+        });
+
+        // Motivation flip cards
+        const newTipBtn = document.getElementById('new-tip-btn');
+        const tips = [
+            "You are stronger than you think. Every challenge you face is an opportunity to grow.",
+            "Breathe. You've survived 100% of your worst days so far.",
+            "Progress, not perfection. Celebrate every small win on your journey.",
+            "Your potential is limitless. Believe in yourself even when no one else does.",
+            "The only way to do great work is to love what you do. Find your passion.",
+            "Don't compare your chapter 1 to someone else's chapter 20. Your journey is unique.",
+            "The best time to plant a tree was 20 years ago. The second best time is now.",
+            "You don't have to be great to start, but you have to start to be great.",
+            "Happiness is not something ready-made. It comes from your own actions.",
+            "The future belongs to those who believe in the beauty of their dreams."
+        ];
+        
+        newTipBtn.addEventListener('click', () => {
+            const randomTip = tips[Math.floor(Math.random() * tips.length)];
+            const icons = ['fas fa-magic', 'fas fa-star', 'fas fa-seedling', 'fas fa-sun', 'fas fa-mountain', 'fas fa-feather'];
+            const randomIcon = icons[Math.floor(Math.random() * icons.length)];
+            
+            const newCard = document.createElement('div');
+            newCard.className = 'flip-card';
+            newCard.innerHTML = `
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <i class="${randomIcon}"></i>
+                        <h3>Flip for Wisdom</h3>
+                    </div>
+                    <div class="flip-card-back">
+                        <i class="fas fa-quote-left quote-icon"></i>
+                        <p>${randomTip}</p>
+                    </div>
+                </div>
+            `;
+            
+            document.querySelector('.new-tip').insertAdjacentElement('beforebegin', newCard);
+            
+            // Animation
+            setTimeout(() => {
+                newCard.style.opacity = '0';
+                newCard.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    newCard.style.transition = 'opacity 0.5s, transform 0.5s';
+                    newCard.style.opacity = '1';
+                    newCard.style.transform = 'translateY(0)';
+                }, 10);
+            }, 10);
+            
+            // Remove oldest card if too many
+            const flipCards = document.querySelectorAll('.flip-card');
+            if (flipCards.length > 4) {
+                flipCards[0].style.opacity = '0';
+                flipCards[0].style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    if (flipCards[0] && flipCards[0].parentNode) flipCards[0].remove();
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>

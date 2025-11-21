@@ -18,18 +18,30 @@ export default function Register() {
 // Function to send user details to Node.js backend
 const sendUserToBackend = async (user, profileData) => {
   try {
-    const response = await fetch("http://localhost:5000/register-user", { // 👈 Make sure this URL/Port is correct
-      method: "POST",
-      headers: { 
-            "Content-Type": "application/json" 
-        },
-        body: JSON.stringify({
-         uid: user.uid, // Firebase User ID
-         email: user.email,
-            // Pass all the extra state variables
-              ...profileData 
-        }),
-    });
+    // const response = await fetch("http://localhost:5000/register-user", { // 👈 Make sure this URL/Port is correct
+    //   method: "POST",
+    //   headers: { 
+    //         "Content-Type": "application/json" 
+    //     },
+    //     body: JSON.stringify({
+    //      uid: user.uid, // Firebase User ID
+    //      email: user.email,
+    //         // Pass all the extra state variables
+    //           ...profileData 
+    //     }),
+    // });
+    const response = await fetch("http://localhost:5000/save-user", {  // ✅ matches backend route
+  method: "POST",
+  headers: { 
+    "Content-Type": "application/json" 
+  },
+  body: JSON.stringify({
+    firebaseUid: user.uid,  // ✅ matches backend field
+    email: user.email,
+    ...profileData
+  }),
+});
+
 
       if (!response.ok) {
           throw new Error('Failed to save user data in backend.');
@@ -75,7 +87,7 @@ const sendUserToBackend = async (user, profileData) => {
 
       // --- END: NEW CODE BLOCK ---
 
-      navigate("/profile");
+      navigate("/HeroPage");
     } catch (err) {
       alert(err.message);
     }

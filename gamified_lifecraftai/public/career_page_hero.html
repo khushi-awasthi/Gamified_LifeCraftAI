@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LifeCraft | Career Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
+  <style>
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+    }
+    
+    :root {
+      --primary: #00c6ff;
+      --secondary: #0072ff;
+      --dark: #0c0e1a;
+      --darker: #080a14;
+      --card-bg: rgba(20, 25, 45, 0.7);
+      --card-hover: rgba(30, 38, 65, 0.8);
+      --text: #e0e6ff;
+      --text-secondary: #a0a8c8;
+    }
+    
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, var(--darker), var(--dark));
+      color: var(--text);
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      padding: 1.5rem 5vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(10px);
+      background: rgba(12, 14, 26, 0.7);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 5px 0;
+      position: relative;
+    }
+
+    nav a:hover, nav a:focus {
+      color: var(--primary);
+      outline: none;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after, nav a:focus::after {
+      width: 100%;
+    }
+
+    /* Content Sections */
+    .content-section {
+      padding: 5vw;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* ===== HOME SECTION ===== */
+    #home {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5vw !important;
+    }
+
+    .hero-text {
+      max-width: 50%;
+    }
+
+    .hero-text h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-text h1 span {
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    .hero-text p {
+      font-size: 1.1rem;
+      margin: 20px 0;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 90%;
+    }
+
+    .cta-btn {
+      margin-top: 20px;
+      padding: 14px 32px;
+      font-size: 1.1rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #000;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      box-shadow: 0 4px 20px rgba(0, 198, 255, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cards {
+      width: 45%;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .card-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .card {
+      padding: 28px;
+      border-radius: 20px;
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .card:hover, .card:focus {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0, 198, 255, 0.25);
+      background: var(--card-hover);
+      outline: none;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0,255,255,0.15), transparent 60%);
+      animation: rotate 8s linear infinite;
+      opacity: 0.7;
+    }
+
+    .card h3 {
+      font-size: 1.6rem;
+      color: var(--text);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card h3 i {
+      font-size: 1.8rem;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .card p {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ===== FEATURES SECTION ===== */
+    .features-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .features-header h2 {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.4s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .feature-card:hover, .feature-card:focus {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 30px rgba(0, 198, 255, 0.25);
+      background: var(--card-hover);
+      outline: none;
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1.2rem;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .feature-card h3 {
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    /* ===== CONTACT SECTION ===== */
+    .contact-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .contact-header h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    .contact-container {
+      display: flex;
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .contact-form, .social-links {
+      background: var(--card-bg);
+      padding: 2.5rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(10, 15, 30, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #000;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .social-links h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .social-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: rgba(30, 38, 65, 0.5);
+      border-radius: 12px;
+    }
+
+    .social-icon {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+
+    /* ===== QUOTE & FOOTER ===== */
+    .quote-section {
+      padding: 80px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 40vh;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(20, 30, 60, 0.7), rgba(36, 59, 85, 0.7));
+      backdrop-filter: blur(10px);
+      margin: 0 5vw;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .quote-box {
+      background: rgba(10, 15, 30, 0.6);
+      backdrop-filter: blur(14px);
+      padding: 40px 50px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 20px rgba(0, 198, 255, 0.3);
+      max-width: 800px;
+    }
+
+    .quote-box p {
+      font-size: 1.5rem;
+      font-style: italic;
+      color: #e0f7ff;
+      line-height: 1.7;
+    }
+
+    footer {
+      padding: 2rem 5vw;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: auto;
+    }
+
+    /* ===== AI CHAT MODAL ===== */
+    .ai-chat-modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(12, 14, 26, 0.95);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .ai-chat-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .chat-container {
+      width: 90%; max-width: 800px; height: 80vh;
+      background: rgba(20, 25, 45, 0.9);
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .chat-header {
+      padding: 20px;
+      background: rgba(30, 38, 65, 0.8);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .close-chat {
+      background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer;
+    }
+
+    .chat-messages {
+      flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;
+    }
+
+    .message {
+      max-width: 80%; padding: 12px 16px; border-radius: 18px; line-height: 1.5;
+    }
+
+    .user-message {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #000;
+      align-self: flex-end;
+      border-bottom-right-radius: 5px;
+    }
+
+    .ai-message {
+      background: rgba(40, 48, 75, 0.7);
+      color: var(--text);
+      align-self: flex-start;
+      border-bottom-left-radius: 5px;
+    }
+
+    .chat-input {
+      padding: 20px;
+      background: rgba(30, 38, 65, 0.8);
+      display: flex; gap: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .chat-input input {
+      flex: 1; padding: 14px 20px; border-radius: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(10, 15, 30, 0.7);
+      color: var(--text);
+      outline: none;
+    }
+
+    .chat-input button {
+      padding: 14px 24px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #000;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 992px) {
+      #home { flex-direction: column; padding: 8vw 5vw !important; text-align: center; }
+      .hero-text { max-width: 100%; margin-bottom: 2.5rem; }
+      .cards { width: 100%; }
+      .hero-text h1 { font-size: 2.8rem; }
+      .contact-container { flex-direction: column; }
+      .social-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .hero-text h1 { font-size: 2.3rem; }
+      .card { padding: 22px; height: 160px; }
+      .chat-container { height: 90vh; width: 95%; }
+    }
+
+    @media (max-width: 480px) {
+      header { padding: 1rem 5vw; }
+      .hero-text h1 { font-size: 2rem; }
+      .cards { gap: 20px; }
+      .card { padding: 20px; height: 150px; }
+      nav ul { gap: 1rem; flex-wrap: wrap; justify-content: center; }
+      .message { max-width: 90%; padding: 10px 14px; }
+      .features-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+  
+  <div class="container">
+    <header>
+      <div class="logo">
+        <span class="logo-icon">✨</span> LifeCraft
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- HOME SECTION -->
+    <section id="home" class="content-section">
+      <div class="hero-text">
+        <h1><span>Shape Your Career</span> with LifeCraft</h1>
+        <p>Your all-in-one Career Growth Companion. Craft your resume, get AI-guided insights, and visualize your journey with interactive roadmaps.</p>
+        <a href="#quote" class="cta-btn">
+          <i class="fas fa-rocket"></i> Start Your Journey
+        </a>
+      </div>
+      <div class="cards">
+        <a href="resume_builder3.html" class="card-link">
+          <div class="card" tabindex="0">
+            <h3><i class="fas fa-file-alt"></i> Resume Builder</h3>
+            <p>Create professional, ATS-friendly resumes tailored to your dream role in minutes.</p>
+          </div>
+        </a>
+        <div class="card" onclick="openAIChat()" tabindex="0" role="button" aria-label="Open Career AI Chat">
+          <h3><i class="fas fa-robot"></i> Career AI Chat</h3>
+          <p>Get personalized career advice from our AI trained on thousands of successful career paths.</p>
+        </div>
+        <a href="career_guidance.html" class="card-link">
+          <div class="card" tabindex="0">
+            <h3><i class="fas fa-map-signs"></i> Visual Roadmap</h3>
+            <p>Visualize your career progression with interactive flowcharts and milestone tracking.</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section id="features" class="content-section">
+      <div class="features-header">
+        <h2>Core Features</h2>
+        <p>Discover how LifeCraft empowers your career journey</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <h3>Smart Resume Builder</h3>
+          <p>Generate ATS-optimized resumes in minutes. Our AI tailors your experience to match job descriptions and industry standards—boosting interview callbacks by up to 40%.</p>
+        </div>
+        
+        <div class="feature-card" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-robot"></i>
+          </div>
+          <h3>Career AI Assistant</h3>
+          <p>Get real-time, personalized advice on career paths, salary negotiation, and interview prep. Trained on thousands of successful professionals, it’s like having a mentor 24/7.</p>
+        </div>
+        
+        <div class="feature-card" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-map-signs"></i>
+          </div>
+          <h3>Visual Career Roadmaps</h3>
+          <p>See your entire career journey mapped out with interactive flowcharts. Track milestones, required skills, and timelines to stay on course toward your dream role.</p>
+        </div>
+        
+        <div class="feature-card" tabindex="0">
+          <div class="feature-icon">
+            <i class="fas fa-language"></i>
+          </div>
+          <h3>Multilingual Support</h3>
+          <p>Access all features in your preferred language. Our AI detects and responds in 10+ languages, making career growth accessible to professionals worldwide.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="content-section">
+      <div class="contact-header">
+        <h2>Get In Touch</h2>
+        <p>Have questions or feedback? Reach out to us and we'll get back to you as soon as possible.</p>
+      </div>
+      <div class="contact-container">
+        <div class="contact-form">
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" name="subject" required>
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+          </form>
+        </div>
+        <div class="social-links">
+          <h3>Connect With Us</h3>
+          <div class="social-grid">
+            <div class="social-item">
+              <div class="social-icon"><i class="fab fa-twitter"></i></div>
+              <div class="social-text">
+                <h4>Twitter</h4>
+                <p>@LifeCraftAI</p>
+              </div>
+            </div>
+            <div class="social-item">
+              <div class="social-icon"><i class="fab fa-linkedin"></i></div>
+              <div class="social-text">
+                <h4>LinkedIn</h4>
+                <p>LifeCraft Official</p>
+              </div>
+            </div>
+            <div class="social-item">
+              <div class="social-icon"><i class="fab fa-github"></i></div>
+              <div class="social-text">
+                <h4>GitHub</h4>
+                <p>LifeCraft Dev</p>
+              </div>
+            </div>
+            <div class="social-item">
+              <div class="social-icon"><i class="fab fa-discord"></i></div>
+              <div class="social-text">
+                <h4>Discord</h4>
+                <p>LifeCraft Community</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUOTE SECTION -->
+    <section id="quote" class="quote-section">
+      <div class="quote-box">
+        <p id="motivational-quote">"Your journey begins with a single step."</p>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2023 LifeCraft. All rights reserved. | Designed with ❤ for your career growth</p>
+    </footer>
+  </div>
+
+  <!-- AI CHAT MODAL -->
+  <div class="ai-chat-modal" id="aiChatModal" role="dialog" aria-modal="true" aria-label="Career AI Assistant">
+    <div class="chat-container">
+      <div class="chat-header">
+        <h2><i class="fas fa-robot"></i> Career AI Assistant</h2>
+        <button class="close-chat" onclick="closeAIChat()" aria-label="Close chat">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="chat-messages" id="chatMessages" aria-live="polite">
+        <div class="message ai-message">
+          Hello! I'm your Career AI Assistant. How can I help you today?
+        </div>
+      </div>
+      <div class="chat-input">
+        <input type="text" id="userInput" placeholder="Ask me anything about your career..." onkeypress="handleKeyPress(event)">
+        <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i> Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Reveal cards
+    gsap.to(".card, .feature-card", {
+      scrollTrigger: { trigger: "#home, #features", start: "top 80%" },
+      y: 0, opacity: 1, stagger: 0.2, duration: 1.2, ease: "power4.out"
+    });
+
+    // AI Chat
+    function openAIChat() {
+      document.getElementById('aiChatModal').classList.add('active');
+      document.getElementById('userInput').focus();
+    }
+
+    function closeAIChat() {
+      document.getElementById('aiChatModal').classList.remove('active');
+    }
+
+    function addMessage(text, isUser = false) {
+      const div = document.createElement('div');
+      div.classList.add('message', isUser ? 'user-message' : 'ai-message');
+      div.textContent = text;
+      document.getElementById('chatMessages').appendChild(div);
+      div.parentNode.scrollTop = div.parentNode.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('userInput');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      addMessage(msg, true);
+      input.value = '';
+      input.disabled = true;
+
+      try {
+        const langRes = await fetch('http://localhost:5000/detect-language', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: msg })
+        });
+        const { languageCode } = await langRes.json();
+
+        const aiRes = await fetch('http://localhost:5000/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question: msg, languageCode })
+        });
+
+        const data = await aiRes.json();
+        addMessage(data.answer);
+      } catch (e) {
+        addMessage("Sorry, I couldn't reach the server. Please ensure your backend is running.");
+      } finally {
+        input.disabled = false;
+        input.focus();
+      }
+    }
+
+    function handleKeyPress(e) {
+      if (e.key === 'Enter') sendMessage();
+    }
+
+    document.getElementById('aiChatModal').addEventListener('click', e => {
+      if (e.target === e.currentTarget) closeAIChat();
+    });
+
+    // Contact form
+    document.getElementById('contactForm').addEventListener('submit', e => {
+      e.preventDefault();
+      alert('Thank you! We’ll get back to you soon.');
+      e.target.reset();
+    });
+
+    // Particle background
+    const canvas = document.getElementById("bg");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+   let particles = [];
+const count = Math.min(150, Math.floor(window.innerWidth / 8));
+
+for (let i = 0; i < count; i++) {
+  particles.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 1.5 + 0.5,
+    sx: (Math.random() - 0.5) * 0.5,
+    sy: (Math.random() - 0.5) * 0.5,
+
+    // FIXED: use template string (backticks)
+    c: `rgba(0, ${198 + Math.floor(Math.random() * 57)}, 255, ${0.3 + Math.random() * 0.4})`
+  });
+}
+
+
+   function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw lines between close particles
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const d = Math.sqrt(dx * dx + dy * dy);
+
+      if (d < 100) {
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(0, 198, 255, ${0.2 * (1 - d / 100)})`;  // FIXED
+        ctx.lineWidth = 0.5;
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.stroke();
+      }
+    }
+  }
+
+  // Draw particles
+  for (let p of particles) {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.c;
+    ctx.fill();
+
+    p.x += p.sx;
+    p.y += p.sy;
+
+    if (p.x < 0 || p.x > canvas.width) p.sx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.sy *= -1;
+  }
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // Quotes
+    const quotes = [
+      '"Success is the sum of small efforts, repeated day in and day out."',
+      '"The future depends on what you do today."',
+      '"Dream big. Start small. Act now."',
+      '"Believe you can and you\'re halfway there."',
+      '"Every expert was once a beginner."'
+    ];
+    let i = 0;
+    const q = document.getElementById("motivational-quote");
+    setInterval(() => {
+      q.style.opacity = 0;
+      setTimeout(() => {
+        q.textContent = quotes[i = (i + 1) % quotes.length];
+        q.style.opacity = 1;
+      }, 500);
+    }, 8000);
+  </script>
+</body>
+</html>
